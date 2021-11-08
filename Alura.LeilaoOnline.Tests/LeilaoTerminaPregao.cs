@@ -19,11 +19,24 @@ namespace Alura.LeilaoOnline.Tests
             //Arrange - Cenário
             var leilao = new Leilao("Van Gogh");
             var fulano = new Interessada("Fulano", leilao);
-            foreach (var valor in ofertas)
+
+            var maria = new Interessada("Maria", leilao);
+
+            leilao.IniciaPregao();
+
+            for (int i = 0; i < ofertas.Length; i++)
             {
-                leilao.RecebeLance(fulano, valor);
+                var valor = ofertas[i];
+                if ((i % 2) == 0)
+                {
+                    leilao.RecebeLance(fulano, valor);
+                }
+                else
+                {
+                    leilao.RecebeLance(maria, valor);
+                }
             }
-            
+
             //Act - metodo sob teste
             leilao.TerminaPregao();
 
@@ -35,10 +48,24 @@ namespace Alura.LeilaoOnline.Tests
         }
 
         [Fact]
+        public void LancaInvalidOperationExceptionDadoPregaoNaoIniciado()
+        {
+            //Arrange - Cenário
+            var leilao = new Leilao("Van Gogh");
+                
+            //Assert
+            Assert.Throws<System.InvalidOperationException>(
+                //Act - metodo sob teste
+                () => leilao.TerminaPregao());
+        }
+
+        [Fact]
         public void RetornaZeroDadoLeilaoSemLances()
         {
             //Arrange - Cenário
             var leilao = new Leilao("Van Gogh");
+            leilao.IniciaPregao();
+
             //Act - metodo sob teste
             leilao.TerminaPregao();
 
